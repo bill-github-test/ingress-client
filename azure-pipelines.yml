@@ -49,5 +49,5 @@ stages:
           az aks get-credentials --resource-group $(azureResourceGroup) --name $(aksClusterName)
           kubectl apply -f deployment.yaml
           kubectl apply -f service.yaml
-          kubectl rollout restart deployment/angular-app
+          kubectl rollout restart deployment/angular-client
       displayName: 'Deploy to AKS'
