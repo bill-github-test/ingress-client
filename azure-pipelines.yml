@@ -12,6 +12,8 @@ variables:
   dockerImageName: angular-client
   # Service Connection
   serviceConnetion: BillTestServiceConnection-BillAngularClient
+  # Namespace
+  namespace: bill-test
 
 stages:
 - stage: Build
@@ -47,7 +49,8 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az aks get-credentials --resource-group $(azureResourceGroup) --name $(aksClusterName)
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.yaml
-          kubectl rollout restart deployment/angular-client
+          kubectl apply -f namespace.yaml
+          kubectl apply -f deployment.yaml -n $(namespace)
+          kubectl apply -f service.yaml -n $(namespace)
+          kubectl rollout restart deployment/angular-client -n $(namespace)
       displayName: 'Deploy to AKS'
