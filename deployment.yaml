@@ -1,0 +1,22 @@
+# deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: angular-client
+  template:
+    metadata:
+      labels:
+        app: angular-client
+    spec:
+      containers:
+      - name: angular-client-container
+        image: BillTestContainerRegistry.azurecr.io/angular-client:latest
+        ports:
+        - containerPort: 80
+      

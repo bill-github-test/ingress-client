@@ -1,0 +1,50 @@
+trigger:
+- main
+
+variables:
+  # Azure Resource Group
+  azureResourceGroup: rg-rsrincloud-ss
+  # Azure Container Registry
+  azureContainerRegistry: BillTestContainerRegistry
+  # AKS Cluster Name
+  aksClusterName: BillTestCluster
+  # Docker Image Name
+  dockerImageName: angular-client
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build job
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: BillTestServiceConnection-BillTestFreshApp
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az acr build --registry $(azureContainerRegistry) --image $(dockerImageName):$(Build.BuildId) .
+          az acr import --name $(azureContainerRegistry) --source $(azureContainerRegistry).azurecr.io/$(dockerImageName):$(Build.BuildId) --image $(dockerImageName):latest --force
+      displayName: 'Build image'
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: BillTestServiceConnection-BillTestFreshApp
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az aks get-credentials --resource-group $(azureResourceGroup) --name $(aksClusterName)
+          kubectl apply -f deployment.yaml
+          kubectl apply -f service.yaml
+      displayName: 'Deploy to AKS'
