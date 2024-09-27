@@ -10,6 +10,8 @@ variables:
   aksClusterName: BillTestCluster
   # Docker Image Name
   dockerImageName: angular-client
+  # Service Connection
+  serviceConnetion: BillTestServiceConnection-BillAngularClient
 
 stages:
 - stage: Build
@@ -22,7 +24,7 @@ stages:
     steps:
     - task: AzureCLI@2
       inputs:
-        azureSubscription: BillTestServiceConnection-BillTestFreshApp
+        azureSubscription: $(serviceConnetion)
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
@@ -40,7 +42,7 @@ stages:
     steps:
     - task: AzureCLI@2
       inputs:
-        azureSubscription: BillTestServiceConnection-BillTestFreshApp
+        azureSubscription: $(serviceConnetion)
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
