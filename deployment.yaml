@@ -17,6 +17,7 @@ spec:
       containers:
       - name: angular-client-container
         image: BillTestContainerRegistry.azurecr.io/angular-client:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
       
