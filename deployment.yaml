@@ -3,21 +3,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: angular-client
+  name: ingress-client
   namespace: bill-test
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: angular-client
+      app: ingress-client
   template:
     metadata:
       labels:
-        app: angular-client
+        app: ingress-client
     spec:
       containers:
-      - name: angular-client-container
-        image: BillTestContainerRegistry.azurecr.io/angular-client:latest
+      - name: ingress-client-container
+        image: BillTestContainerRegistry.azurecr.io/ingress-client:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
