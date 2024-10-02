@@ -30,6 +30,7 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
+          az acr login --name $(azureContainerRegistry)
           az acr build --registry $(azureContainerRegistry) --image $(dockerImageName):$(Build.BuildId) .
           az acr import --name $(azureContainerRegistry) --source $(azureContainerRegistry).azurecr.io/$(dockerImageName):$(Build.BuildId) --image $(dockerImageName):latest --force
       displayName: 'Build image'
@@ -52,5 +53,7 @@ stages:
           kubectl apply -f namespace.yaml
           kubectl apply -f deployment.yaml -n $(namespace)
           kubectl apply -f service.yaml -n $(namespace)
+          kubectl apply -f ingress-class.yaml -n $(namespace)
+          kubectl apply -f ingress.yaml -n $(namespace)
           kubectl rollout restart deployment/$(dockerImageName) -n $(namespace)
       displayName: 'Deploy to AKS'
