@@ -9,9 +9,9 @@ variables:
   # AKS Cluster Name
   aksClusterName: BillTestCluster
   # Docker Image Name
-  dockerImageName: angular-client
+  dockerImageName: ingress-client
   # Service Connection
-  serviceConnetion: BillTestServiceConnection-BillAngularClient
+  serviceConnetion: BillTestServiceConnection-BillIngressClient
   # Namespace
   namespace: bill-test
 
@@ -52,5 +52,5 @@ stages:
           kubectl apply -f namespace.yaml
           kubectl apply -f deployment.yaml -n $(namespace)
           kubectl apply -f service.yaml -n $(namespace)
-          kubectl rollout restart deployment/angular-client -n $(namespace)
+          kubectl rollout restart deployment/$(dockerImageName) -n $(namespace)
       displayName: 'Deploy to AKS'
