@@ -10,6 +10,6 @@ RUN npm run build -- --configuration production --base-href /client/ --project a
 
 # Stage 2: Serve Angular application using nginx
 FROM nginx:alpine
-COPY --from=builder /app/dist/angular-client/browser /usr/share/nginx/html
+COPY --from=builder /app/dist/angular-client/browser /usr/share/nginx/html/client
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
