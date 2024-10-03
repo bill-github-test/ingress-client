@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
-RUN npm run build -- --configuration production --base-href --project angular-client 
+RUN npm run build -- --configuration production --project angular-client 
 
 # Stage 2: Serve Angular application using nginx
 FROM nginx:alpine
