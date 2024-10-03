@@ -6,11 +6,10 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
-RUN npm run build -- --configuration production 
+RUN npm run build -- --configuration production --project angular-client
 
 # Stage 2: Serve Angular application using nginx
 FROM nginx:alpine
-# COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/dist/angular-client/browser /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
